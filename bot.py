@@ -1,6 +1,7 @@
 import discord
 import requests
-import json
+import firebase_admin
+from firebase_admin import credentials, firestore
 from config import DISCORD_TOKEN, OPENROUTER_API_KEY
 
 # Setup Intents
@@ -19,9 +20,6 @@ PREFIX = "!"
 # Model Default
 DEFAULT_MODEL = "openai/gpt-3.5-turbo"
 
-# Penyimpanan model dan history tiap user (menggunakan file untuk persistensi)
-HISTORY_FILE = "user_histories.json"
-
 # Model yang tersedia
 available_models = {
     "gpt-3.5": "openai/gpt-3.5-turbo",
@@ -31,28 +29,34 @@ available_models = {
     "gemini": "google/gemini-pro"
 }
 
-# Memuat history dari file jika ada
-try:
-    with open(HISTORY_FILE, "r") as f:
-        user_histories = json.load(f)
-except (FileNotFoundError, json.JSONDecodeError):
-    user_histories = {}
+# Inisialisasi Firebase
+cred = credentials.Certificate("serviceAccount.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
-# Fungsi untuk menyimpan history ke file
-def save_history():
-    with open(HISTORY_FILE, "w") as f:
-        json.dump(user_histories, f, indent=4)
+# Fungsi untuk mendapatkan history user dari Firestore
+def get_user_history(user_id):
+    """Mengambil riwayat percakapan pengguna dari Firestore"""
+    doc_ref = db.collection("user_histories").document(user_id)
+    doc = doc_ref.get()
+    if doc.exists:
+        return doc.to_dict()
+    return {"model": DEFAULT_MODEL, "messages": []}
+
+# Fungsi untuk menyimpan history user ke Firestore
+def save_user_history(user_id, history):
+    """Menyimpan riwayat percakapan pengguna ke Firestore"""
+    db.collection("user_histories").document(user_id).set(history)
 
 # Fungsi untuk mendapatkan respons AI
 def get_ai_response(user_id, user_input):
     """Mengirimkan prompt ke OpenRouter API dan mendapatkan jawaban"""
-    model = user_histories.get(user_id, {}).get("model", DEFAULT_MODEL)
+    history = get_user_history(user_id)
+    model = history.get("model", DEFAULT_MODEL)
 
-    # Ambil history pengguna
-    history = user_histories.get(user_id, {}).get("messages", [])
-
-    # Tambahkan input terbaru ke history
-    history.append({"role": "user", "content": user_input})
+    # Tambahkan input user ke history
+    messages = history.get("messages", [])
+    messages.append({"role": "user", "content": user_input})
 
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
@@ -61,7 +65,7 @@ def get_ai_response(user_id, user_input):
 
     payload = {
         "model": model,
-        "messages": history,  # Kirim seluruh history user
+        "messages": messages,
         "max_tokens": 2000
     }
 
@@ -72,11 +76,10 @@ def get_ai_response(user_id, user_input):
         bot_response = data["choices"][0]["message"]["content"]
 
         # Tambahkan respons bot ke history
-        history.append({"role": "assistant", "content": bot_response})
+        messages.append({"role": "assistant", "content": bot_response})
 
-        # Simpan history terbaru
-        user_histories[user_id] = {"model": model, "messages": history}
-        save_history()
+        # Simpan ke Firestore
+        save_user_history(user_id, {"model": model, "messages": messages})
 
         return bot_response
     else:
@@ -113,9 +116,9 @@ async def on_message(message):
             model_choice = parts[1].lower()
 
             if model_choice in available_models:
-                user_histories[user_id] = user_histories.get(user_id, {})
-                user_histories[user_id]["model"] = available_models[model_choice]
-                save_history()
+                history = get_user_history(user_id)
+                history["model"] = available_models[model_choice]
+                save_user_history(user_id, history)
                 await message.channel.send(f"✅ Model AI diubah ke **{model_choice}**")
             else:
                 available = "\n".join([f"- `{key}`" for key in available_models.keys()])
