@@ -32,7 +32,7 @@ API_URL = "https://openrouter.ai/api/v1/chat/completions"
 PREFIX = "!"
 
 # Model Default
-DEFAULT_MODEL = "openai/gpt-4.5-turbo"
+DEFAULT_MODEL = "openai/gpt-4-turbo"
 
 # Model yang tersedia
 available_models = {
