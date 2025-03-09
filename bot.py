@@ -32,7 +32,7 @@ API_URL = "https://openrouter.ai/api/v1/chat/completions"
 PREFIX = "!"
 
 # Model Default
-DEFAULT_MODEL = "openai/gpt-3.5-turbo"
+DEFAULT_MODEL = "openai/gpt-4.5-turbo"
 
 # Model yang tersedia
 available_models = {
@@ -40,7 +40,10 @@ available_models = {
     "gpt-4": "openai/gpt-4-turbo",
     "mistral": "mistralai/mistral-7b-instruct",
     "claude": "anthropic/claude-3-sonnet",
-    "gemini": "google/gemini-pro"
+    "gemini": "google/gemini-pro",
+    "sonar-pro": "perplexity/sonar-pro",  # Model Perplexity
+    "sonar-reasoning": "perplexity/sonar-reasoning-pro",
+    "deepseek": "deepseek-ai/deepseek-llm"
 }
 
 # 🔍 Cek apakah Firebase bisa dihubungkan
