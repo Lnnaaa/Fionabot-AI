@@ -1,0 +1,27 @@
+{
+    "language_name": "Indonesia",
+    "instruc_image_caption": "Model gambar-ke-teks mungkin membutuhkan waktu untuk dimuat, menyebabkan kesalahan batas waktu. Model cadangan atau fungsional harus digunakan sebagai gantinya. Keterangan gambar dikategorikan sebagai OCR (1), yang baik untuk gambar yang mengandung tanda atau simbol, dan deteksi gambar umum (2), yang akan sangat tidak akurat untuk OCR. Keterangan gambar:",
+    "pfp": "Ubah foto profil bot menggunakan URL gambar",
+    "pfp_change_msg_1": "Harap berikan URL gambar atau lampirkan gambar untuk perintah ini",
+    "pfp_change_msg_2": "Foto profil berhasil diubah",
+    "ping": "PONG! Menampilkan latensi bot",
+    "ping_msg": "Pong! Latensi: ",
+    "changeusr": "Ubah nama pengguna bot",
+    "changeusr_msg_1": "Mencoba mengubah nama pengguna...",
+    "changeusr_msg_2_part_1": "Maaf, nama pengguna '",
+    "changeusr_msg_2_part_2": "' sudah digunakan.",
+    "changeusr_msg_3": "Nama pengguna diubah menjadi ",
+    "toggledm": "Aktifkan atau nonaktifkan DM untuk mengobrol",
+    "toggleactive": "Aktifkan atau nonaktifkan saluran aktif",
+    "toggleactive_msg_1": "telah dihapus dari daftar saluran aktif.",
+    "toggleactive_msg_2": "telah ditambahkan ke daftar saluran aktif!",
+    "help": "Dapatkan semua perintah lainnya!",
+    "help_footer": "https://dsc.gg/mishals-abode",
+    "nekos": "Tampilkan gambar atau GIF acak dari neko, waifu, husbando, kitsune, atau aksi lainnya",
+    "nekos_msg": "Kategori yang diberikan tidak valid. Kategori yang valid adalah: ",
+    "imagine": "Hasilkan gambar",
+    "imagine_msg": "Pembuatan gambar selesai!",
+    "bonk": "Hapus riwayat pesan",
+    "bonk_msg": "Riwayat pesan telah dibersihkan!"
+  }
+  

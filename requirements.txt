@@ -1,5 +1,11 @@
+aiohttp
 discord.py
-requests
+discord.py[voice]
+gtts
+langdetect
 python-dotenv
-firebase-admin
-colorama
+pyttsx3
+PyYAML
+Requests
+openai
+duckduckgo-search
